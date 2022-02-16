@@ -1,0 +1,91 @@
+<div class="row">
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Information Compte</div>
+      <div class="card-body">
+        <button class="btn btn-primary" (click)="onGetMyAccount()">Consulter mon Compte</button>
+
+        <div class="card-text" *ngIf="myAccount">
+          <span style="font-weight: bold;">IBAN :</span> {{myAccount.id}} <br/>
+          <span style="font-weight: bold;">SOLDE :</span> {{myAccount.balance}} <br/>
+          <span style="font-weight: bold;">DATE DE CREATION:</span> {{myAccount.creationDate | date:'dd/MM/yyyy'}} <br/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Relevé de compte</div>
+      <div class="card-body">
+        <div class="card-text" *ngIf="myAccount">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Operation</th>
+              <th scope="col">Date</th>
+              <th scope="col">Montant</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let op of myAccountStatement">
+              <th scope="row">{{op.id}}</th>
+              <td>{{op.typeOp}}</td>
+              <td>{{op.operationDate | date:'dd/MM/yyyy HH:mm'}}</td>
+              <td>{{op.amount}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Opération sur le compte</div>
+      <div class="card-body">
+          <div>
+            <input name="typeOperation" type="radio" [value]="'DEPOT'" [(ngModel)]="typeOperation">
+            <label>DEPOT</label>
+
+            <br/>
+
+            <input name="typeOperation" type="radio" [value]="'RETRAIT'" [(ngModel)]="typeOperation">
+            <label>RETRAIT</label>
+          </div>
+
+          <br/>
+
+          <div>
+            <label>MONTANT</label>
+            <input type="number" name="amount" [(ngModel)]="operationAmount" min="0"/>
+          </div>
+
+          <br/>
+
+          <button class="btn btn-primary"
+                  [disabled]="operationAmount == 0 || operationAmount < 0 || operationAmount == null
+                              || (operationAmount > myAccount?.balance && typeOperation === 'RETRAIT')"
+                  (click)="makeOperation(typeOperation, operationAmount)">{{typeOperation}}</button>
+
+        <div class="alert alert-warning" [hidden]="operationAmount !== 0" role="alert">
+          Opération impossible : Montant de l'opération vide ou non requis
+        </div>
+
+        <div class="alert alert-danger" role="alert" [hidden]="(operationAmount <= myAccount?.balance && typeOperation === 'DEPOT')
+                                                              || (operationAmount > myAccount?.balance && typeOperation === 'DEPOT')
+                                                              || (operationAmount <= myAccount?.balance && typeOperation === 'RETRAIT')" >
+          Opération impossible : Montant de l'opération supérieur au solde du compte
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
