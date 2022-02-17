@@ -33,4 +33,16 @@ Nothing more, especially no UI, no persistence.
 
 **As a** bank client
 
-**I want to** see the history (operation, date, amount, balance) of my operations 
+**I want to** see the history (operation, date, amount, balance) of my operations
+
+### Demarrage de l'application BACK
+```
+mvn spring-boot:run
+```
+
+
+### Demarrage de l'application FRONT
+```
+ng serve
+```
+
